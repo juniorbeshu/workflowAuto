@@ -1,0 +1,23 @@
+name: Branch Protection
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  branch-protection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Branch Protection
+        uses: peter-evans/branch-protection@v2.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          strict: true
+          enforce-admins: true
+          required-status-checks: "continuous-integration/travis-ci"
+          required-approving-review-count: 1
+          dismiss-stale-reviews: true
+          require-code-owners: false
