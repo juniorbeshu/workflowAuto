@@ -1,4 +1,4 @@
-name: Branch Protection
+name: Trufflehog Scan
 
 on:
   pull_request:
@@ -6,17 +6,15 @@ on:
       - main
 
 jobs:
-  branch-protection:
+  trufflehog-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Branch Protection
+      - name: Trufflehog Scan
+        uses: trufflesecurity/trufflehog@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          strict: true
-          enforce-admins: true
-          required-status-checks: "continuous-integration/travis-ci"
-          required-approving-review-count: 1
-          dismiss-stale-reviews: true
-          require-code-owners: false
+          path: '.'
+          base: 'main'
+          head: 'HEAD'
+          extra_args: '--regex --entropy=False --max_depth 50'
